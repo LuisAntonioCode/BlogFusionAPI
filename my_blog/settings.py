@@ -40,6 +40,10 @@ INSTALLED_APPS = [
 
     #
     'rest_framework',
+    'drf_spectacular',
+
+    #
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -113,6 +117,18 @@ USE_I18N = True
 
 USE_TZ = True
 
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Blog Fusion API',
+    'DESCRIPTION': 'Esta es un API REST para un proyecto blog.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -123,3 +139,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
