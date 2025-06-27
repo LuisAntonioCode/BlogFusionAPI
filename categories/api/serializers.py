@@ -6,3 +6,8 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'title', 'slug', 'published', 'created_at']
         read_only_fields = ('created_at',)
+
+class CategoryInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['title', 'slug']
