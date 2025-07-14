@@ -40,12 +40,13 @@ class PostSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         # Validar que al menos se haya enviado uno de los dos campos "category_id o category_slug"
-        #if not data.get('category'):
         if 'category' not in data and not self.instance:
             raise serializers.ValidationError({
                 'category': 'Debe proporcionar category_id o category_slug'
             })
         return data
 
-
-
+class PostInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'slug']
