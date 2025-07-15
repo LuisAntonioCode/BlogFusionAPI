@@ -1,14 +1,13 @@
 from rest_framework import serializers
 from comments.models import Comment
 from users.api.serializers import UserInfoSerializer
-from posts.api.serializers import PostInfoSerializer
 from posts.models import Post
 
 class CommentSerializer(serializers.ModelSerializer):
     # Solo lectura (para mostrar info del usuario)
     user = UserInfoSerializer(read_only=True)
     # Solo lectura (para mostrar info del post)
-    post = PostInfoSerializer(read_only=True)
+    post = serializers.SerializerMethodField(read_only=True)
 
     # Solo escritura (acepta ID)
     post_id = serializers.PrimaryKeyRelatedField(
@@ -38,3 +37,14 @@ class CommentSerializer(serializers.ModelSerializer):
                 'post': 'Debe proporcionar post_id o post_slug'
             })
         return data
+    
+    def get_post(self, obj):
+        from posts.api.serializers import PostInfoSerializer
+        return PostInfoSerializer(obj.post).data
+    
+class CommentInfoSerializer(serializers.ModelSerializer):
+    user = UserInfoSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['content', 'user', 'created_at']

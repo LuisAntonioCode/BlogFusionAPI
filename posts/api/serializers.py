@@ -9,6 +9,8 @@ class PostSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(read_only=True)
     # Solo lectura (para mostrar info de la categoria)
     category = CategoryInfoSerializer(read_only=True)
+    # Este campo representa todos los comentarios relacionados con cada post
+    comments = serializers.SerializerMethodField(read_only=True)
 
     # Solo escritura (acepta ID)
     category_id = serializers.PrimaryKeyRelatedField(
@@ -17,7 +19,7 @@ class PostSerializer(serializers.ModelSerializer):
         source='category',
         required=False #Necesario para permitir usar slug como alternativa
     )
-    #Solo escritura (acepta ID)
+    #Solo escritura (acepta slug)
     category_slug = serializers.SlugRelatedField(
         queryset=Category.objects.all(),
         slug_field='slug', 
@@ -30,9 +32,9 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = [
             'id', 'title', 'content', 'slug', 'image', 'published', 'created_at', 'user', 'category', 
-            'category_id', 'category_slug'
+            'category_id', 'category_slug', 'comments'
         ]
-        read_only_fields = ('slug', 'created_at', 'user')
+        read_only_fields = ('slug', 'created_at', 'user', 'comments')
 
         extra_kwargs = {
             'category': {'required': True, 'allow_null': False},
@@ -45,6 +47,11 @@ class PostSerializer(serializers.ModelSerializer):
                 'category': 'Debe proporcionar category_id o category_slug'
             })
         return data
+    
+    def get_comments(self, obj):
+        from comments.api.serializers import CommentInfoSerializer
+        comments_qs = obj.comments.order_by('-created_at')
+        return CommentInfoSerializer(comments_qs, many=True).data
 
 class PostInfoSerializer(serializers.ModelSerializer):
     class Meta:
