@@ -13,8 +13,10 @@ class User(AbstractUser):
     """
 
     # Override del campo email para hacerlo único (requerido para login)
-    email = models.EmailField(unique=True)
+    ##email = models.EmailField(unique=True)
     # Configuración para usar email como campo de autenticación principal
-    USERNAME_FIELD = 'email'  # Campo usado para login (en lugar de 'username')
+    ##USERNAME_FIELD = 'email'  # Campo usado para login (en lugar de 'username')
     # Solo email y password serán obligatorios
-    REQUIRED_FIELDS = [] 
+    ##REQUIRED_FIELDS = []
+
+    pass
