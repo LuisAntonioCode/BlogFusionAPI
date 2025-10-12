@@ -10,3 +10,15 @@ python manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
 python manage.py migrate
+
+# ----------------------------------------------------
+# Bloque de Creación de Superusuario
+# ----------------------------------------------------
+# Solo ejecuta si la variable de control existe
+if [ "$CREATE_SUPERUSER" = "True" ]; then
+    echo "Intentando crear el superusuario..."
+    # El comando --noinput obliga a Django a usar las variables de entorno
+    python manage.py createsuperuser --noinput
+    echo "Superusuario creado."
+fi
+# ----------------------------------------------------
