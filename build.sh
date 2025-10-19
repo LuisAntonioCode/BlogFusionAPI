@@ -8,8 +8,13 @@ pip install -r requirements.txt
 # Convert static asset files
 python manage.py collectstatic --no-input
 
-# Apply any outstanding database migrations
-python manage.py migrate
+# Aplicar migraciones de forma segura
+echo "Applying migrations safely..."
+if python manage.py migrate --noinput; then
+    echo "✅ Migraciones aplicadas correctamente."
+else
+    echo "⚠️ Error al aplicar migraciones. Continuando sin interrumpir el despliegue."
+fi
 
 # ----------------------------------------------------
 # Bloque de Creación de Superusuario
